@@ -10,7 +10,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
 
     @Override
     public Item addNewItem(Long userId, Item item) {
@@ -25,9 +24,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItems(Long itemId) {
+    public List<Item> getItems(Long userId) {
 
-        return itemRepository.findByUserId();
+        return itemRepository.findByUserId(userId);
     }
 
 }
