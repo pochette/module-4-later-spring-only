@@ -7,6 +7,7 @@ import java.util.List;
 
 @Component
 public class UserRepositoryImpl implements UserRepository {
+    private static long id = 0;
     private final List<User> users = new ArrayList<>();
 
     @Override
@@ -22,10 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private long getId() {
-        long lastId = users.stream()
-                .mapToLong(User::getId)
-                .max()
-                .orElse(0);
-        return lastId + 1;
+        return id++;
     }
+
 }
