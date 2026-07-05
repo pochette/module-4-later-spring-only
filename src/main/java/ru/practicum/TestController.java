@@ -8,6 +8,6 @@ public class TestController {
 
     @GetMapping("/test")
     public String test() {
-        return "OK from controller!";
+        return "Ok from controller!";
     }
 }
