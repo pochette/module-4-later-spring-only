@@ -15,6 +15,9 @@
         <!--  Версии зависимостей    -->
         <tomcat-embed-core.version>10.1.24</tomcat-embed-core.version>
         <spring-webmvc.version>6.1.7</spring-webmvc.version>
+        <lombok.version>1.18.32</lombok.version>
+        <jackson-databind.version>2.17.1</jackson-databind.version>
+        <logback-classic.version>1.5.6</logback-classic.version>
     </properties>
 
     <dependencies>
@@ -28,6 +31,24 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring-webmvc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-classic.version}</version>
         </dependency>
     </dependencies>
 </project>
