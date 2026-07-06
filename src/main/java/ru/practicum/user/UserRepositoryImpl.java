@@ -1,29 +1,46 @@
 package ru.practicum.user;
 
-import org.springframework.stereotype.Component;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-    private static long id = 0;
-    private final List<User> users = new ArrayList<>();
+
+    private final EntityManager entityManager;
+
+
+    public List<User> searchByEmailDomain(String domain) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> cr = cb.createQuery(User.class);
+        Root<User> root = cr.from(User.class);
+        cr.select(root).where(cb.like(root.get("email"), "%" + domain));
+        List<User> foundUsers = entityManager.createQuery(cr).getResultList();
+        return foundUsers;
+    }
 
     @Override
     public List<User> findAll() {
-        return users;
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> cr = cb.createQuery(User.class);
+        Root<User> root = cr.from(User.class);
+        cr.select(root);
+        return entityManager.createQuery(cr).getResultList();
+
+
     }
 
     @Override
     public User save(User user) {
-        user.setId(getId());
-        users.add(user);
+        entityManager.persist(user);
         return user;
-    }
-
-    private long getId() {
-        return id++;
     }
 
 }
