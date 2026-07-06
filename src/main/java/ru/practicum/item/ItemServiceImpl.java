@@ -2,7 +2,6 @@ package ru.practicum.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.user.UserRepository;
 
 import java.util.List;
 
@@ -12,21 +11,19 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
 
     @Override
-    public Item addNewItem(Long userId, Item item) {
-
-        return itemRepository.save(item);
+    public ItemDto addNewItem(Long userId, ItemDto itemDto) {
+        Item item = itemRepository.save(ItemDtoMapper.toEntity(itemDto));
+        return ItemDtoMapper.toItemDto(item);
     }
 
     @Override
     public void deleteItem(Long userId, Long itemId) {
         itemRepository.deleteByUserIdAndItemId(userId, itemId);
-
     }
 
     @Override
-    public List<Item> getItems(Long userId) {
-
-        return itemRepository.findByUserId(userId);
+    public List<ItemDto> getItems(Long userId) {
+        return ItemDtoMapper.toItemsListDto(itemRepository.findByUserId(userId));
     }
 
 }

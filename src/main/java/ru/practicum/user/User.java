@@ -1,17 +1,20 @@
 package ru.practicum.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.Instant;
 
 @Data
 @Entity
+@Builder
 @Table(name = "users", schema = "public")
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY  )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", nullable = false)
