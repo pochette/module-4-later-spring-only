@@ -10,11 +10,13 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement()
 @RequiredArgsConstructor
 @EnableJpaRepositories(basePackages = "ru.practicum")
 public class PersistenceConfig {
@@ -30,29 +32,25 @@ public class PersistenceConfig {
         return dataSource;
     }
 
-    private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.jdbc.time_zone",
-                environment.getRequiredProperty("hibernate.jdbc.time_zone"));
-        properties.put("hibernate.show_sql",
-                environment.getProperty("hibernate.show_sql", "false"));
-        return properties;
-    }
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        final HibernateJpaVendorAdapter vendorAdapter =
-                new HibernateJpaVendorAdapter();
-
-        final LocalContainerEntityManagerFactoryBean emf =
-                new LocalContainerEntityManagerFactoryBean();
-
+        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        final LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource);
         emf.setJpaVendorAdapter(vendorAdapter);
-        emf.setPackagesToScan("ru.practicum");
         emf.setJpaProperties(hibernateProperties());
+        emf.setPackagesToScan("ru.practicum");
 
         return emf;
+    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.jdbc.time_zone", environment.getProperty("hibernate.jdbc.time_zone"));
+        properties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql", "false"));
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        return properties;
+
     }
 
     @Bean
@@ -62,3 +60,7 @@ public class PersistenceConfig {
         return transactionManager;
     }
 }
+
+
+
+
