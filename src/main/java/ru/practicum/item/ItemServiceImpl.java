@@ -13,13 +13,13 @@ class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getItems(long userId) {
         List<Item> userItems = repository.findByUserId(userId);
-        return ItemMapper.mapToItemDto(userItems);
+        return ItemMapper.toItemsListDto(userItems);
     }
 
     @Override
     public ItemDto addNewItem(long userId, ItemDto itemDto) {
-        Item item = repository.save(ItemMapper.mapToItem(itemDto, userId));
-        return ItemMapper.mapToItemDto(item);
+        Item item = repository.save(ItemMapper.toEntity(itemDto, userId));
+        return ItemMapper.toItemDto(item);
     }
 
     @Override

@@ -13,14 +13,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
-    @Transactional(readOnly = true)
+
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = repository.findAll();
-        return UserMapper.mapToUserDto(users);
+        return UserMapper.toDtosList(users);
     }
 
     public void checkUsers() {
@@ -41,13 +42,10 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto saveUser(UserDto userDto) {
-        User user = repository.save(UserMapper.mapToNewUser(userDto));
-        return UserMapper.mapToUserDto(user);
+        User user = repository.save(UserMapper.toEntity(userDto));
+        return UserMapper.toDto(user);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void updateUsers() {
-
-    }
 }
