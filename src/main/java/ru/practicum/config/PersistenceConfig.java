@@ -38,6 +38,7 @@ public class PersistenceConfig {
                 environment.getRequiredProperty("hibernate.jdbc.time_zone"));
         properties.put("hibernate.show_sql",
                 environment.getProperty("hibernate.show_sql", "false"));
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return properties;
     }
 
