@@ -3,6 +3,7 @@ package ru.practicum.item;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,10 +17,12 @@ final class ItemMapper {
 
     }
 
-    public static List<ItemDto> toItemsListDto(List<Item> items) {
-        return items.stream()
-                .map(ItemMapper::toItemDto)
-                .toList();
+    public static List<ItemDto> toItemsListDto(Iterable<Item> items) {
+        List<ItemDto> result = new ArrayList<>();
+        for (Item item : items) {
+            result.add(ItemMapper.toItemDto(item));
+        }
+        return result;
     }
 
     public static ItemDto toItemDto(Item item) {

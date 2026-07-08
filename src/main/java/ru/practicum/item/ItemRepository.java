@@ -3,13 +3,14 @@ package ru.practicum.item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
+public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom, QuerydslPredicateExecutor<Item> {
 
     @Query(value = "select " +
             "from items as it left join users as us " +
