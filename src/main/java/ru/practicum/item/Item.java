@@ -10,19 +10,25 @@ import java.util.Set;
 
 @Entity
 @Table(name = "items")
-@Getter @Setter @ToString
-class Item {
+@Getter
+@Setter
+@ToString
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "user_id")
     private Long userId;
+
     @Column
     private String url;
+
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "tags", joinColumns = @JoinColumn(name = "item_id"))
     @Column(name = "name")
-    private Set<String> tags = new HashSet<>();
 
+    private Set<String> tags = new HashSet<>();
 
 }
