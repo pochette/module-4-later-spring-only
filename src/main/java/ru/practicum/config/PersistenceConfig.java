@@ -39,7 +39,11 @@ public class PersistenceConfig {
         properties.put("hibernate.jdbc.time_zone",
                 environment.getRequiredProperty("hibernate.jdbc.time_zone"));
         properties.put("hibernate.show_sql",
-                environment.getProperty("hibernate.show_sql", "false"));
+                environment.getProperty("hibernate.show_sql", "true"));
+        properties.put("hibernate.format_sql",
+            environment.getProperty("hibernate.format_sql", "true"));
+        properties.put("hibernate.hbm2ddl.auto",
+            environment.getProperty("hibernate.hbm2ddl.auto", "create-drop"));
         return properties;
     }
 
