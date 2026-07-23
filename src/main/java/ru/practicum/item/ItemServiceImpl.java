@@ -16,13 +16,14 @@ class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public List<ItemDto> getItems(long userId, Set<String> tags) {
-        BooleanExpression byUserId = QItem.item.userId.eq(userId);
+        if (tags == null || tags.isEmpty()) {
+            return ItemMapper.toItemsListDto(repository.findByUserId(userId));
+        }
+
+        BooleanExpression byUserId = QItem.item.user.id.eq(userId);
         BooleanExpression byAnyTag = QItem.item.tags.any().in(tags);
         Iterable<Item> foundItems = repository.findAll(byUserId.and(byAnyTag));
         return ItemMapper.toItemsListDto(foundItems);
-
-//        List<Item> userItems = repository.findByUserId(userId);
-//        return ItemMapper.toItemsListDto(userItems);
     }
 
     @Override

@@ -26,6 +26,6 @@ final class ItemMapper {
     }
 
     public static ItemDto toItemDto(Item item) {
-        return new ItemDto(item.getId(), item.getUserId(), item.getUrl(), item.getTags());
+        return new ItemDto(item.getId(), item.getUser.getId(), item.getUrl(), item.getTags());
     }
 }

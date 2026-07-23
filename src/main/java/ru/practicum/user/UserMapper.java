@@ -1,15 +1,13 @@
 package ru.practicum.user;
 
-import ru.practicum.item.ItemDto;
-
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserMapper {
-    public static List<UserDto> toDtosList(Iterable<User> userList) {
+    public static List<UserDto> toDtoList(Iterable<User> userList) {
         List<UserDto> result = new ArrayList<>();
         for (User user : userList) {
             result.add(UserMapper.toDto(user));
@@ -23,7 +21,7 @@ public class UserMapper {
                 .withZone(ZoneOffset.UTC)
                 .format(user.getRegistrationDate());
         return new UserDto(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(),
-                regDate, user.getState());
+            regDate, LocalDate.of(1994, 1, 29), user.getState());
 
     }
 

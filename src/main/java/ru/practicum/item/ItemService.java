@@ -6,7 +6,6 @@ import java.util.Set;
 interface ItemService {
     List<ItemDto> getItems(long userId, Set<String> tags);
 
-    List<ItemDto> getItems(long userId, Set<String> tags);
 
     ItemDto addNewItem(long userId, ItemDto itemDto);
 

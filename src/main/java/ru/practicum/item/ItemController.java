@@ -26,7 +26,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> get(@RequestHeader("X-Later-User-Id") Long userId,
-                             @RequestParam Set<String> tags) {
+                             @RequestParam(required = false) Set<String> tags) {
         return itemService.getItems(userId, tags);
     }
 }
