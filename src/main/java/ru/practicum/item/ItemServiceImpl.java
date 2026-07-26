@@ -41,8 +41,10 @@ class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deleteItem(long userId, long itemId) {
-        itemRepository.deleteByUserIdAndId(userId, itemId);
+        Item itemForDelete = getAndCheckPermissionByUser(userId, itemId);
+        itemRepository.delete(itemForDelete);
     }
 
     @Override
