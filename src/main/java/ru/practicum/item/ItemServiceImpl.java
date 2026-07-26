@@ -2,6 +2,7 @@ package ru.practicum.item;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ import ru.practicum.item.model.QItem;
 import ru.practicum.item.repository.ItemRepository;
 import ru.practicum.user.User;
 import ru.practicum.user.UserRepository;
-import ru.practicum.user.exception.InsufficientPermissionException;
-import ru.practicum.user.exception.UserNotFoundException;
+import ru.practicum.item.common.InsufficientPermissionException;
+import ru.practicum.item.common.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,7 @@ class ItemServiceImpl implements ItemService {
         Sort sort = makeOrderByClause(request.getSort());
         PageRequest pageRequest = PageRequest.of(0, request.getLimit(), sort);
 
-        Iterable<Item> result = itemRepository.findAll(finalCondition, pageRequest);
+        Page<Item> result = itemRepository.findAll(finalCondition, pageRequest);
         return ItemMapper.toItemsListDto(result);
 
     }
@@ -101,28 +102,6 @@ class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(resultItem);
     }
 
-    private Item getAndCheckPermissionByUser(Long userId, Long itemId) {
-        Item item =
-            itemRepository
-                .findById(itemId)
-                .orElseThrow(() ->
-                    new NotFoundException("Item by id " + itemId + " and by user " +
-                        "id " + userId + " was not found"));
-
-        if (!item
-            .getUser()
-            .getId()
-            .equals(userId)) {
-
-            throw new InsufficientPermissionException("You do not have permission to perform this operation");
-        }
-        return item;
-    }
-
-    /// /
-//public enum Sort { NEWEST, OLDEST, TITLE }
-//    public enum ContentType { ALL, ARTICLE, IMAGE, VIDEO }
-//    public enum State { ALL, UNREAD, READ }
     private BooleanExpression makeConditionState(GetItemRequest.State state) {
 
         if (state.equals(GetItemRequest.State.READ)) {
@@ -168,6 +147,24 @@ class ItemServiceImpl implements ItemService {
                     .descending();
             }
         }
+    }
+
+    private Item getAndCheckPermissionByUser(Long userId, Long itemId) {
+        Item item =
+            itemRepository
+                .findById(itemId)
+                .orElseThrow(() ->
+                    new NotFoundException("Item by id " + itemId + " and by user " +
+                        "id " + userId + " was not found"));
+
+        if (!item
+            .getUser()
+            .getId()
+            .equals(userId)) {
+
+            throw new InsufficientPermissionException("You do not have permission to perform this operation");
+        }
+        return item;
     }
 
 }

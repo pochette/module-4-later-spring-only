@@ -1,8 +1,7 @@
-package ru.practicum.user.exception;
+package ru.practicum.item.common;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.practicum.item.common.LaterApplicationException;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class InsufficientPermissionException extends LaterApplicationException {

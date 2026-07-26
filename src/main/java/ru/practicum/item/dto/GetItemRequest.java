@@ -1,7 +1,6 @@
 package ru.practicum.item.dto;
 
 import lombok.Data;
-import lombok.Value;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class GetItemRequest {
     }
 
     public boolean hasTags() {
-        return tags != null || !tags.isEmpty();
+        return tags != null && !tags.isEmpty();
     }
 
     public enum Sort { NEWEST, OLDEST, TITLE, SITE }

@@ -1,19 +1,18 @@
 package ru.practicum.item.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Value;
 
-import java.util.List;
 import java.util.Set;
 
-@Value
+@Data
 @Getter
 @Builder(toBuilder = true)
 
 public class ModifyItemRequest {
-    Long itemId;
-    boolean read;
-    boolean replaceTags;
-    Set<String> tags;
+    private Long itemId;
+    private boolean read;
+    private boolean replaceTags;
+    private Set<String> tags;
 }
