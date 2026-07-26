@@ -7,6 +7,8 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import org.springframework.boot.test.json.JsonbTester;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
@@ -23,6 +25,7 @@ public class UserDtoJsonTest {
             "John",
             "Doe",
             "2022.07.03 19:55:00",
+            LocalDate.of(1994,1,29),
             UserState.ACTIVE);
 
         JsonContent<UserDto> result = json.write(userDto);

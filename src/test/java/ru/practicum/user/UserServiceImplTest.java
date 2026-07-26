@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -126,6 +127,7 @@ public class UserServiceImplTest {
             LocalDateTime
                 .now()
                 .toString(),
+            LocalDate.of(1994,1,29),
             UserState.ACTIVE);
     }
 

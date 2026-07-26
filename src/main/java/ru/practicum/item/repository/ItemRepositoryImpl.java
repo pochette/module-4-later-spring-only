@@ -1,9 +1,12 @@
-package ru.practicum.item;
+package ru.practicum.item.repository;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
+import ru.practicum.item.dto.ItemInfoWithUrlState;
+import ru.practicum.item.ItemShort;
+import ru.practicum.item.model.Item;
 
 @Repository
 public class ItemRepositoryImpl implements ItemRepositoryCustom {

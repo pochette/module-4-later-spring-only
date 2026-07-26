@@ -1,4 +1,4 @@
-package ru.practicum.item;
+package ru.practicum.item.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,8 +41,13 @@ public class Item {
     @Column(name = "has_video")
     private boolean hasVideo;
 
+    private boolean unread = true;
+
+
     @Column(name = "date_resolved")
     private Instant dateResolved;
+
+
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "tags", joinColumns = @JoinColumn(name = "item_id"))

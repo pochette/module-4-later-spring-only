@@ -1,7 +1,8 @@
-package ru.practicum.item;
+package ru.practicum.item.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.item.ItemShort;
 
 @Getter @Setter
 public class ItemInfoWithUrlState implements ItemShort {

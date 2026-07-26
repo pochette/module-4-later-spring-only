@@ -7,6 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.practicum.item.dto.ItemInfoWithUrlState;
+import ru.practicum.item.model.Item;
+import ru.practicum.item.repository.ItemRepository;
+import ru.practicum.item.repository.ItemRepositoryImpl;
 
 import java.io.IOException;
 import java.util.Optional;

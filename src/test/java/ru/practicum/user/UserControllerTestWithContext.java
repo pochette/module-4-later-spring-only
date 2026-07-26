@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -27,6 +28,7 @@ class UserControllerTestWithContext {
         "John",
         "Doe",
         "2022.07.03 19:55:00",
+        LocalDate.of(1994,1,29),
         UserState.ACTIVE);
     @Autowired
     ObjectMapper objectMapper;

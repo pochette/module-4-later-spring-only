@@ -2,17 +2,21 @@ package ru.practicum.item;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.item.dto.ItemDto;
+import ru.practicum.item.model.Item;
+import ru.practicum.user.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ItemMapper {
-    public static Item toEntity(ItemDto itemDto, Long userId) {
+    public static Item toEntity(ItemDto itemDto, User user) {
         Item newItem = new Item();
-        newItem.setUserId(userId);
-        newItem.setUrl(itemDto.url());
-        newItem.setTags(itemDto.tags());
+        newItem.setUser(user);
+        newItem.setUrl(itemDto.getUrl());
+        newItem.setTags(itemDto.getTags());
         return newItem;
 
     }
@@ -26,6 +30,17 @@ final class ItemMapper {
     }
 
     public static ItemDto toItemDto(Item item) {
-        return new ItemDto(item.getId(), item.getUser.getId(), item.getUrl(), item.getTags());
+        return new ItemDto(item.getId(), item
+            .getUser()
+            .getId(), item.getUrl(), item.getResolvedUrl(),
+            item.getTitle(),
+            item.isHasImage(),
+            item.isHasVideo()
+            , item.isUnread(),
+            item
+                .getDateResolved()
+                .toString(),
+            new HashSet<>(item.getTags()));
     }
+
 }

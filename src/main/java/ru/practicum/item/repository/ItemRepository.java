@@ -1,4 +1,4 @@
-package ru.practicum.item;
+package ru.practicum.item.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.item.dto.ItemCountByUser;
+import ru.practicum.item.model.Item;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,21 +25,21 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositor
 
 
 
-    @Query("select new ru.practicum.item.ItemCountByUser(it.userId, count(it.id)) " +
+    @Query("select new ru.practicum.item.ItemCountByUser(it.user.id, count(it.id)) " +
             "from Item as it " +
             "where it.url like ?1 " +
-            "group by it.userId " +
+            "group by it.user.id " +
             "order by count(it.id) desc")
     List<ItemCountByUser> countItemsByUserId(String urlPart);
 
     @Transactional
     @Modifying
-    @Query("delete from Item i where i.userId = ?1 and i.id = ?2")
+    @Query("delete from Item i where i.user.id = ?1 and i.id = ?2")
     void deleteByUserIdAndId(long userId, long itemId);
 
     List<Item> findByUserId(long userId);
 
-    @Query("select i from Item i where i.userId = ?1 and i.url = ?2")
+    @Query("select i from Item i where i.user.id = ?1 and i.url = ?2")
     Optional<Item> findByUserIdAndUrl(Long userId, String url);
 
 }
