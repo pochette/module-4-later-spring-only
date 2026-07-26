@@ -25,7 +25,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositor
 
 
 
-    @Query("select new ru.practicum.item.ItemCountByUser(it.user.id, count(it.id)) " +
+    @Query("select new ru.practicum.item.dto.ItemCountByUser(it.user.id, count(it.id)) " +
             "from Item as it " +
             "where it.url like ?1 " +
             "group by it.user.id " +

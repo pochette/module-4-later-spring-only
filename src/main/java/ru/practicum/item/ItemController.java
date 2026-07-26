@@ -43,12 +43,6 @@ public class ItemController {
         return itemService.getItems(request);
     }
 
-    @GetMapping
-    List<ItemDto> getItems(GetItemRequest req) {
-        return itemService.getItems(req);
-
-    }
-
     @PatchMapping
     public ItemDto patchTags(@RequestHeader("X-Later-User-Id") Long userId,
                              @RequestParam(name = "itemId") Long itemId,
