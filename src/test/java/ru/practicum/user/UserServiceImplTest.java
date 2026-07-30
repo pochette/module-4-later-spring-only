@@ -18,34 +18,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @Transactional
-
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@SpringBootTest(properties = "db.name=test", webEnvironment = SpringBootTest.WebEnvironment.NONE)
 
-@SpringBootTest(properties = "db.name=test",
-    webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class UserServiceImplTest {
-    private static Long id = 0L;
 
-//        for (UserDto user : sourceUsers) {
-//            User entity = UserMapper.toEntity(user);
-//            em.persist(entity);
-//        }
-//        em.flush();
-//
-//        // when
-//        List<UserDto> targetUsers = service.getAllUsers();
-//
-//        // then
-//        assertThat(targetUsers, hasSize(sourceUsers.size()));
-//        for (UserDto sourceUser : sourceUsers) {
-//            assertThat(targetUsers, hasItem(allOf(
-//                hasProperty("id", notNullValue()),
-//                hasProperty("firstName", equalTo(sourceUser.firstName())),
-//                hasProperty("lastName", equalTo(sourceUser.lastName())),
-//                hasProperty("email", equalTo(sourceUser.email()))
-//            )));
-//        }
-//    }
+    private static Long id = 0L;
     private final EntityManager em;
     private final UserService service;
 
@@ -57,11 +35,9 @@ public class UserServiceImplTest {
     @Test
     void getAllUsers() {
         // given
-        List<UserDto> sourceUsers = List.of(
-            makeUserDto("ivan@email", "Ivan", "Ivanov"),
-            makeUserDto("petr@email", "Petr", "Petrov"),
-            makeUserDto("vasilii@email", "Vasilii", "Vasiliev")
-        );
+        List<UserDto> sourceUsers =
+            List.of(makeUserDto("ivan@email", "Ivan", "Ivanov"), makeUserDto("petr@email", "Petr", "Petrov"),
+                makeUserDto("vasilii@email", "Vasilii", "Vasiliev"));
         for (UserDto sourceUser : sourceUsers) {
             User entity = UserMapper.toEntity(sourceUser);
             em.persist(entity);
@@ -73,27 +49,26 @@ public class UserServiceImplTest {
         assertThat(targetUsers, hasSize(sourceUsers.size()));
 
         for (UserDto sourceUser : sourceUsers) {
-            assertThat(
-                targetUsers
-                    .stream()
-                    .anyMatch(target ->
-                        target.id() != null
-                            && target
-                            .email()
-                            .equals(sourceUser.email())
-                            && target
-                            .lastName()
-                            .equals(sourceUser.lastName())
-                            && target
-                            .firstName()
-                            .equals(sourceUser.firstName())
-                            && target
-                            .state()
-                            .equals(UserState.ACTIVE)
-                            && target.registrationDate() != null), is(true));
+            assertThat(targetUsers
+                .stream()
+                .anyMatch(target -> target.id() != null && target
+                    .email()
+                    .equals(sourceUser.email()) && target
+                    .lastName()
+                    .equals(sourceUser.lastName()) && target
+                    .firstName()
+                    .equals(sourceUser.firstName()) && target
+                    .state()
+                    .equals(UserState.ACTIVE) && target.registrationDate() != null), is(true));
 
         }
 
+    }
+
+    private UserDto makeUserDto(String email, String firstName, String lastName) {
+        return new UserDto(null, email, firstName, lastName, LocalDateTime
+            .now()
+            .toString(), LocalDate.of(1994, 1, 29), UserState.ACTIVE);
     }
 
     @Test
@@ -116,19 +91,6 @@ public class UserServiceImplTest {
         assertThat(user.getEmail(), equalTo(userDto.email()));
         assertThat(user.getState(), equalTo(userDto.state()));
         assertThat(user.getRegistrationDate(), notNullValue());
-    }
-
-    private UserDto makeUserDto(String email, String firstName, String lastName) {
-        return new UserDto(
-            null,
-            email,
-            firstName,
-            lastName,
-            LocalDateTime
-                .now()
-                .toString(),
-            LocalDate.of(1994,1,29),
-            UserState.ACTIVE);
     }
 
 }

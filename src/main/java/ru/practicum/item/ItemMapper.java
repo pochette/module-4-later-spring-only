@@ -6,6 +6,7 @@ import ru.practicum.item.dto.ItemDto;
 import ru.practicum.item.model.Item;
 import ru.practicum.user.User;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,10 @@ final class ItemMapper {
         newItem.setUser(user);
         newItem.setUrl(itemDto.getUrl());
         newItem.setTags(itemDto.getTags());
+        newItem.setResolvedUrl(itemDto.getResolvedUrl());
+        newItem.setDateResolved(Instant.parse(itemDto.getDateResolved()));
+        newItem.setId(itemDto.getId());
+        newItem.setTitle(itemDto.getTitle());
         return newItem;
 
     }

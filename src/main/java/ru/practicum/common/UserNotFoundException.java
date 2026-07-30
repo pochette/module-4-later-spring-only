@@ -1,4 +1,4 @@
-package ru.practicum.item.common;
+package ru.practicum.common;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

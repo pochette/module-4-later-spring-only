@@ -7,7 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.item.common.NotFoundException;
+import ru.practicum.common.InsufficientPermissionException;
+import ru.practicum.common.NotFoundException;
+import ru.practicum.common.UserNotFoundException;
 import ru.practicum.item.dto.GetItemRequest;
 import ru.practicum.item.dto.ItemDto;
 import ru.practicum.item.dto.ModifyItemRequest;
@@ -16,8 +18,6 @@ import ru.practicum.item.model.QItem;
 import ru.practicum.item.repository.ItemRepository;
 import ru.practicum.user.User;
 import ru.practicum.user.UserRepository;
-import ru.practicum.item.common.InsufficientPermissionException;
-import ru.practicum.item.common.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
 class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private UrlMetadataRetriever urlMetadataRetriever;
+    private final UrlMetadataRetriever urlMetadataRetriever;
 
     @Override
     public ItemDto addNewItem(long userId, ItemDto itemDto) {
@@ -37,8 +37,22 @@ class ItemServiceImpl implements ItemService {
                 " найден"));
         UrlMetadataRetriever.UrlMetadata urlMetadata = urlMetadataRetriever.retrieve(itemDto.getUrl());
 
-        Item item = itemRepository.save(ItemMapper.toEntity(itemDto, user));
+        Item item = ItemMapper.toEntity(itemDto, user);
+
+        setMetadata(item, urlMetadata);
+        itemRepository.save(item);
+
         return ItemMapper.toItemDto(item);
+    }
+
+    private static void setMetadata(Item item, UrlMetadataRetriever.UrlMetadata urlMetadata) {
+        item.setResolvedUrl(urlMetadata.getResolvedUrl());
+        item.setDateResolved(urlMetadata.getDateResolver());
+        item.setMimeType(urlMetadata.getMimeType());
+        item.setHasVideo(urlMetadata.isHasVideo());
+        item.setHasImage(urlMetadata.isHasImage());
+        item.setUrl(urlMetadata.getNormalUrl());
+        item.setTitle(urlMetadata.getTitle());
     }
 
     @Override
@@ -92,7 +106,9 @@ class ItemServiceImpl implements ItemService {
             item
                 .getTags()
                 .clear();
-            item.setTags(request.getTags());
+            item
+                .getTags()
+                .addAll(request.getTags());
         } else {
             item
                 .getTags()

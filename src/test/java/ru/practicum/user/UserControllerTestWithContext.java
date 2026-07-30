@@ -22,16 +22,12 @@ class UserControllerTestWithContext {
     @Autowired
     private MockMvc mvc;
 
-    private UserDto userDto = new UserDto(
-        1L,
-        "john.doe@mail.com",
-        "John",
-        "Doe",
-        "2022.07.03 19:55:00",
-        LocalDate.of(1994,1,29),
-        UserState.ACTIVE);
+    private final UserDto userDto =
+        new UserDto(1L, "john.doe@mail.com", "John", "Doe", "2022.07.03 19:55:00", LocalDate.of(1994, 1, 29),
+            UserState.ACTIVE);
     @Autowired
     ObjectMapper objectMapper;
+
     @MockBean
     UserService userService;
 
@@ -39,11 +35,12 @@ class UserControllerTestWithContext {
     void saveNewUser() throws Exception {
         when(userService.saveUser(userDto)).thenReturn(userDto);
 
-        mvc.perform(post("/users")
-            .content(objectMapper.writeValueAsString(userDto))
-            .characterEncoding(StandardCharsets.UTF_8)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+        mvc
+            .perform(post("/users")
+                .content(objectMapper.writeValueAsString(userDto))
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
             .andExpect(jsonPath("$.firstName", is(userDto.firstName())))

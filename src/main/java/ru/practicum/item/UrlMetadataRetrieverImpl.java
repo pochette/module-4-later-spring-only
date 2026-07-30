@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
-import ru.practicum.item.common.ItemRetrieverException;
+import ru.practicum.common.ItemRetrieverException;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
         int readTimeout) {
         // Для получения метаданных об URL воспользуемся стандартным HttpClient'ом.
         // Для этого создадим его экземпляр с нужными нам настройками
-        // Во первых, указываем всегда переходить по новому адресу, если сервер
+        // Во-первых, указываем всегда переходить по новому адресу, если сервер
         // обрабатывающий URL указывает нам на это. Такая ситуация может возникнуть,
         // например если пользователь сохраняет сокращенную ссылку (полученную, например
         // через сервис bitly.com) или по каким-либо другим причинам. Также указываем таймаут
@@ -71,7 +71,7 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
         Elements imgElement = doc.getElementsByTag("img");
         Elements videoElement = doc.getElementsByTag("video");
 
-        // добавляем полученные данные в ответ. В том числе нахзодим заголовок полученной страницы
+        // добавляем полученные данные в ответ. В том числе находим заголовок полученной страницы
         return UrlMetadataImpl
             .builder()
             .title(doc.title())
