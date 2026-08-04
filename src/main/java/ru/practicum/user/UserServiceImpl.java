@@ -21,6 +21,8 @@ class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         List<User> users = repository.findAll();
         return UserMapper.toDtoList(users);
+
+
     }
 
     public void checkUsers() {
