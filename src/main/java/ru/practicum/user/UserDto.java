@@ -1,17 +1,18 @@
 package ru.practicum.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserDto {
-    private Long id;
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String registrationDate;
-    private UserState state;
+import java.time.LocalDate;
+
+public record UserDto(Long id,
+                      String email,
+                      String firstName,
+                      String lastName,
+                      String registrationDate,
+                      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+                      LocalDate dateOfBirth,
+                      UserState state) {
+    public Long getId() {
+        return id;
+    }
 }

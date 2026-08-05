@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +47,9 @@ class UserControllerTest {
             "John",
             "Doe",
             "2022.07.03 19:55:00",
-            UserState.ACTIVE);
+            LocalDate.of(2000, 1, 1)
+
+            , UserState.ACTIVE);
     }
 
     @Test
@@ -61,8 +64,8 @@ class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
-            .andExpect(jsonPath("$.firstName", is(userDto.getFirstName())))
-            .andExpect(jsonPath("$.lastName", is(userDto.getLastName())))
-            .andExpect(jsonPath("$.email", is(userDto.getEmail())));
+            .andExpect(jsonPath("$.firstName", is(userDto.firstName())))
+            .andExpect(jsonPath("$.lastName", is(userDto.lastName())))
+            .andExpect(jsonPath("$.email", is(userDto.email())));
     }
 }

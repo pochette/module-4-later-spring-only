@@ -1,21 +1,18 @@
 package ru.practicum.item.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
-public class ModifyItemRequest {
-    private long itemId;
-    private boolean read;
-    private Set<String> tags;
-    private boolean replaceTags;
+@Getter
+@Builder(toBuilder = true)
 
-    public boolean hasTags() {
-        return tags != null && !tags.isEmpty();
-    }
+public class ModifyItemRequest {
+    private Long itemId;
+    private boolean read;
+    private boolean replaceTags;
+    private Set<String> tags;
 }

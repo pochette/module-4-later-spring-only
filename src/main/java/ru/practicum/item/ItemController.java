@@ -1,13 +1,15 @@
 package ru.practicum.item;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.item.dto.AddItemRequest;
 import ru.practicum.item.dto.GetItemRequest;
 import ru.practicum.item.dto.ItemDto;
 import ru.practicum.item.dto.ModifyItemRequest;
+import ru.practicum.user.UserDto;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/items")
@@ -15,27 +17,10 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    @GetMapping
-    public List<ItemDto> get(
-            @RequestHeader("X-Later-User-Id") long userId,
-            @RequestParam(name = "state", defaultValue = "unread") String state,
-            @RequestParam(name = "contentType", defaultValue = "all") String contentType,
-            @RequestParam(name = "sort", defaultValue = "newest") String sort,
-            @RequestParam(name = "limit", defaultValue = "10") int limit,
-            @RequestParam(name = "tags", required = false) List<String> tags
-    ) {
-        return itemService.getItems(GetItemRequest.of(userId, state, contentType, sort, limit, tags));
-    }
-
-    @GetMapping(params = "lastName")
-    public List<ItemDto> get(@RequestParam(name = "lastName") String lastName) {
-        return itemService.getUserItems(lastName);
-    }
-
     @PostMapping
     public ItemDto add(@RequestHeader("X-Later-User-Id") Long userId,
-                       @RequestBody AddItemRequest request) {
-        return itemService.addNewItem(userId, request);
+                       @RequestBody ItemDto item) {
+        return itemService.addNewItem(userId, item);
     }
 
     @DeleteMapping("/{itemId}")
@@ -44,9 +29,32 @@ public class ItemController {
         itemService.deleteItem(userId, itemId);
     }
 
-    @PatchMapping
-    public ItemDto modifyItem(@RequestHeader("X-Later-User-Id") long userId,
-                              @RequestBody ModifyItemRequest request) {
-        return itemService.changeItem(userId, request);
+    @GetMapping
+    public List<ItemDto> get(@RequestHeader("X-Later-User-Id") Long userId,
+                             @RequestParam(defaultValue = "unread") String state,
+                             @RequestParam(defaultValue = "all") String contentType,
+                             @RequestParam(defaultValue = "newest") String sort,
+                             @RequestParam(defaultValue = "10") int limit,
+                             @RequestParam(required = false) Set<String> tags) {
+        GetItemRequest request = GetItemRequest.of(userId, state, contentType, sort, limit, tags
+            .stream()
+            .toList());
+
+        return itemService.getItems(request);
     }
+
+    @PatchMapping
+    public ItemDto patchTags(@RequestHeader("X-Later-User-Id") Long userId,
+                             @RequestParam(name = "itemId") Long itemId,
+                             @RequestParam(required = false) Set<String> tags,
+                             @RequestParam(required = false, defaultValue = "false") boolean replaceTags) {
+        ModifyItemRequest request = ModifyItemRequest
+            .builder()
+            .itemId(itemId)
+            .replaceTags(replaceTags)
+            .tags(tags)
+            .build();
+        return itemService.patchTags(userId, request);
+    }
+
 }

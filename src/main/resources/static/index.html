@@ -1,0 +1,105 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Later API Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <p class="eyebrow">Spring Boot учебный фронтенд</p>
+        <h1>Later API Dashboard</h1>
+    </div>
+    <div class="status" id="status">Готово</div>
+</header>
+
+<main class="layout">
+    <section class="panel users-panel">
+        <div class="panel-title">
+            <h2>Пользователи</h2>
+            <button id="refreshUsers" type="button">Обновить</button>
+        </div>
+
+        <form id="userForm" class="form-grid">
+            <label>Email
+                <input name="email" type="email" placeholder="student@mail.ru" required>
+            </label>
+            <label>Имя
+                <input name="firstName" type="text" placeholder="Аня" required>
+            </label>
+            <label>Фамилия
+                <input name="lastName" type="text" placeholder="Иванова" required>
+            </label>
+            <label>Дата рождения
+                <input name="dateOfBirth" type="date" required>
+            </label>
+            <button type="submit" class="primary">Добавить пользователя</button>
+        </form>
+
+        <div id="usersList" class="list"></div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-title">
+            <h2>Items</h2>
+            <span id="activeUserLabel" class="muted">Выберите пользователя</span>
+        </div>
+
+        <form id="itemForm" class="form-grid">
+            <label>URL
+                <input name="url" type="url" placeholder="https://example.com/article" required>
+            </label>
+            <label>Теги через запятую
+                <input name="tags" type="text" placeholder="java, spring, jpa">
+            </label>
+            <button type="submit" class="primary">Добавить item</button>
+        </form>
+
+        <div class="toolbar">
+            <input id="tagFilter" type="text" placeholder="Фильтр тегов: java,spring">
+            <button id="loadItems" type="button">Показать items</button>
+        </div>
+
+        <div id="itemsList" class="list cards"></div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-title">
+            <h2>Notes</h2>
+            <span class="muted">Заметки к сохраненным ссылкам</span>
+        </div>
+
+        <form id="noteForm" class="form-grid">
+            <label>Item ID
+                <input name="itemId" type="number" min="1" required>
+            </label>
+            <label>Текст заметки
+                <textarea name="text" rows="3" placeholder="Краткая мысль по ссылке" required></textarea>
+            </label>
+            <button type="submit" class="primary">Добавить note</button>
+        </form>
+
+        <div class="toolbar split">
+            <button id="loadNotes" type="button">Все notes</button>
+            <input id="noteSearch" type="text" placeholder="url или tag">
+            <button id="searchByUrl" type="button">По URL</button>
+            <button id="searchByTag" type="button">По тегу</button>
+        </div>
+
+        <div id="notesList" class="list cards"></div>
+    </section>
+</main>
+
+<section class="flow" aria-label="Схема работы API">
+    <div class="flow-node">User</div>
+    <div class="flow-arrow">POST /items</div>
+    <div class="flow-node">Item</div>
+    <div class="flow-arrow">POST /notes</div>
+    <div class="flow-node">Note</div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
