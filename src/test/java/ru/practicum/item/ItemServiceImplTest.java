@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ActiveProfiles;
 import ru.practicum.common.InsufficientPermissionException;
 import ru.practicum.common.NotFoundException;
 import ru.practicum.item.dto.GetItemRequest;
@@ -32,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 
 public class ItemServiceImplTest {

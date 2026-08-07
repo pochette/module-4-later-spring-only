@@ -47,7 +47,7 @@ class ItemServiceImpl implements ItemService {
 
     private static void setMetadata(Item item, UrlMetadataRetriever.UrlMetadata urlMetadata) {
         item.setResolvedUrl(urlMetadata.getResolvedUrl());
-        item.setDateResolved(urlMetadata.getDateResolver());
+        item.setDateResolved(urlMetadata.getDateResolved());
         item.setMimeType(urlMetadata.getMimeType());
         item.setHasVideo(urlMetadata.isHasVideo());
         item.setHasImage(urlMetadata.isHasImage());

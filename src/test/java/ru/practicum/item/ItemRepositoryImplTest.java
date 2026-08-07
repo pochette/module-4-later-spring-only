@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import ru.practicum.item.dto.ItemInfoWithUrlState;
 import ru.practicum.item.model.Item;
 import ru.practicum.item.repository.ItemRepository;
@@ -42,6 +43,7 @@ import static org.mockito.Mockito.when;
 
 //
 //
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class ItemRepositoryImplTest {
     @InjectMocks

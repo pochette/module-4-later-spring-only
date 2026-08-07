@@ -24,7 +24,7 @@ import java.time.Instant;
 
 @Slf4j
 @Service
-class UrlMetaDataRetrieverImpl implements UrlMetaDataRetriever {
+class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
     private final HttpClient client;
 
     // В качестве параметра конструктора, сервис принимает количество секунд в течении которых
@@ -32,7 +32,7 @@ class UrlMetaDataRetrieverImpl implements UrlMetaDataRetriever {
     // ссылки для сохранения. Этот параметр Spring получает из файла настроек и автоматически
     // внедряет в бин. Если в файле настроек таймаут не указан, то по умолчанию он будет равен
     // 120 секундам.
-    UrlMetaDataRetrieverImpl(@Value("${url-metadata-retriever.read_timeout-sec:120}") int readTimeout) {
+    UrlMetadataRetrieverImpl(@Value("${url-metadata-retriever.read_timeout-sec:120}") int readTimeout) {
         // Для получения метаданных об URL воспользуемся стандартным HttpClient'ом.
         // Для этого создадим его экземпляр с нужными нам настройками
         // Во первых, указываем всегда переходить по новому адресу, если сервер

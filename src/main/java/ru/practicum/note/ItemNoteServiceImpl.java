@@ -5,8 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.common.InsufficientPermissionException;
-import ru.practicum.item.ItemRepository;
 import ru.practicum.item.model.Item;
+import ru.practicum.item.repository.ItemRepository;
 
 import java.util.List;
 
