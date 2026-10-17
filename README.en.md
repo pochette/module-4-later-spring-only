@@ -76,6 +76,8 @@ Filter values: `state` — `ALL`, `UNREAD`, `READ`; `contentType` — `ALL`, `AR
 mvn test
 ```
 
+Integration tests expect PostgreSQL on `localhost:5432` with a `test` database; the remaining tests run without external dependencies.
+
 **28 tests** cover services, controllers, repositories and DTO JSON serialization. Metadata extraction is tested separately, with the external site replaced by MockWebServer.
 
 ## Author
