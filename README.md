@@ -1,295 +1,83 @@
-# Later Backend (Spring Framework → Spring Boot)
+# Later
 
-Приложение, которое достанется вам, предназначено для сохранения и систематизации полезных веб-ссылок. Его основная идея — дать пользователю возможность собирать подборки интересных материалов и иметь к ним доступ с любых устройств.
-Представьте: вы дизайнер, ежедневно читаете множество статей, смотрите кейсы и исследования. Это приложение становится вашим личным хранилищем лучших публикаций. При этом вы можете использовать его как для себя, так и делиться подборками с коллегами или единомышленниками.
+> Сервис отложенного чтения: сохранение ссылок, автоматический разбор страниц, теги и заметки.
 
-> Цель обучения: перенос легаси-проекта с чистом Spring Framework на Spring Boot, а так же изучение основных инструментов современной разработки.
-> Разработка ведется по отдельным веткам. 
-> Учебный backend-проект, демонстрирующий полный цикл разработки современного Java-приложения: от классического Spring Framework до Spring Boot с покрытием тестами, контейнеризацией и автоматизацией сборки.
+![Java](https://img.shields.io/badge/Java_21-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.3-6DB33F?logo=springboot&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?logo=spring&logoColor=white)
+![QueryDSL](https://img.shields.io/badge/QueryDSL-0769AD)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white)
 
-![Java](https://img.shields.io/badge/Java-21-orange)
-![Spring](https://img.shields.io/badge/Spring_Framework-6.x-success)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen)
-![Hibernate](https://img.shields.io/badge/Hibernate-ORM-green)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-blue)
-![Docker](https://img.shields.io/badge/Docker-enabled-2496ED)
-![JUnit5](https://img.shields.io/badge/JUnit-5-green)
-![Mockito](https://img.shields.io/badge/Mockito-5-lightgrey)
-![GitHub Actions](https://img.shields.io/badge/CI/CD-GitHub_Actions-blue)
+**Русский** · [English](README.en.md)
 
----
+## О проекте
 
-# О проекте
+Бэкенд сервиса «прочитать позже», похожего на Pocket. Пользователь сохраняет ссылку, сервис сам открывает страницу и определяет итоговый URL после редиректов, тип контента, заголовок, а также наличие картинок и видео. Ссылки размечаются тегами и фильтруются, к ним можно добавлять заметки.
 
-Проект выполнен в рамках курса **«Java-разработчик» Яндекс Практикума**.
+Проект — миграция легаси-приложения с «чистого» Spring Framework (сервлеты и Java-конфигурация) на Spring Boot. Каждый этап миграции сохранён в отдельной ветке, от `1_spring_and_servlets` до `7_business_logic_boot`.
 
-Главной целью являлось изучение полного жизненного цикла backend-разработки:
+**Ключевые решения:**
 
-* разработка REST API;
-* работа с Spring Framework;
-* перенос приложения на Spring Boot;
-* проектирование базы данных;
-* использование Spring Data JPA и Hibernate;
-* написание модульных, интеграционных и web-тестов;
-* контейнеризация приложения;
-* автоматизация сборки и тестирования с помощью CI/CD.
+- **Разбор страниц.** HTTP-запрос и разбор HTML через jsoup вынесены в отдельный компонент `UrlMetadataRetriever` за интерфейсом, поэтому в тестах его легко заменить.
+- **Гибкая выборка.** Ссылки фильтруются по статусу (прочитано или нет), типу контента (статья, картинка, видео) и тегам, сортируются по дате, заголовку или сайту. Динамические условия строятся через QueryDSL.
+- **Проекции и кастомные репозитории.** Для облегчённых выборок используются интерфейсные проекции (`UserShort`), для нестандартных запросов — собственные реализации репозиториев.
+- **Тесты на всех уровнях.** Юнит-тесты на Mockito, срезы `@WebMvcTest` и `@JsonTest`, интеграционные тесты с полным контекстом, а также MockWebServer для внешних HTTP-запросов.
 
-Проект постепенно развивался по мере изучения новых технологий, что отражено в истории коммитов и отдельных ветках репозитория.
+## Стек
 
----
+| Область | Технологии |
+| --- | --- |
+| Язык и фреймворк | Java 21, Spring Boot 3.3 (Web, Data JPA, Data REST) |
+| Данные | PostgreSQL, Hibernate, QueryDSL, Hibernate JPA Metamodel |
+| Интеграции | jsoup (разбор HTML) |
+| Тесты | JUnit 5, Mockito, MockMvc, OkHttp MockWebServer |
+| Сборка и запуск | Maven, Docker, Docker Compose |
 
-# Реализованный функционал
-
-### Пользователи
-
-* создание пользователей;
-* обновление информации;
-* получение пользователя;
-* получение списка пользователей.
-
-### Вещи
-
-* добавление вещей;
-* редактирование;
-* поиск вещей;
-* получение списка вещей владельца.
-
-### Бронирования
-
-* создание бронирования;
-* подтверждение владельцем;
-* отклонение бронирования;
-* получение истории бронирований;
-* фильтрация по состояниям.
-
-### Комментарии
-
-* публикация комментариев после завершения аренды;
-* получение комментариев вместе с информацией о вещи.
-
-### Запросы вещей
-
-* создание запросов;
-* просмотр собственных запросов;
-* просмотр запросов других пользователей.
-
----
-
-# Технологический стек
-
-## Язык
-
-* Java 21
-
-## Framework
-
-* Spring Framework
-* Spring Boot
-
-## Работа с данными
-
-* Spring Data JPA
-* Hibernate
-* PostgreSQL
-
-## Сборка
-
-* Maven
-
-## Контейнеризация
-
-* Docker
-* Docker Compose
-
-## Тестирование
-
-* JUnit 5
-* Mockito
-* Spring Boot Test
-* MockMvc
-* DataJpaTest
-* WebMvcTest
-
-## Инструменты
-
-* Git
-* GitHub
-* IntelliJ IDEA
-
-## CI/CD
-
-* GitHub Actions
-* автоматическая сборка проекта;
-* запуск тестов при Push и Pull Request;
-* проверка успешности сборки.
-
----
-
-# Архитектура
-
-Проект реализован по многослойной архитектуре.
+## Архитектура
 
 ```text
-Client
-   │
-REST API
-   │
-Controller
-   │
-Service
-   │
-Repository
-   │
-PostgreSQL
+src/main/java/ru/practicum
+├── user/     # пользователи и их статусы
+├── item/     # ссылки: сохранение, извлечение метаданных, теги, фильтры
+├── note/     # заметки к ссылкам, поиск по URL и тегу
+└── common/   # исключения и обработка ошибок
 ```
 
-Основные пакеты:
+## Быстрый старт
 
-```text
-controller
-dto
-mapper
-service
-repository
-model
-exception
-validation
-configuration
-```
-
----
-
-# Основные изученные темы
-
-Во время разработки проекта были изучены и применены на практике:
-
-### Java
-
-* ООП;
-* Collections Framework;
-* Stream API;
-* Optional;
-* Generics;
-* исключения;
-* многопоточность (базовые принципы).
-
-### Spring
-
-* Dependency Injection;
-* IoC Container;
-* Java Configuration;
-* Bean Lifecycle;
-* REST Controller;
-* Validation;
-* Exception Handling.
-
-### Spring Boot
-
-* автоконфигурация;
-* профили приложения;
-* свойства конфигурации;
-* логирование;
-* работа с окружениями.
-
-### Persistence
-
-* JPA;
-* Hibernate;
-* связи между сущностями;
-* ленивая и жадная загрузка;
-* транзакции;
-* SQL;
-* PostgreSQL.
-
-### Тестирование
-
-Реализованы различные уровни тестирования:
-
-* Unit-тесты;
-* Integration-тесты;
-* Repository-тесты;
-* Controller-тесты;
-* MockMvc-тестирование REST API;
-* тестирование слоя Service;
-* использование Mockito для изоляции зависимостей.
-
-### Docker
-
-* контейнеризация приложения;
-* запуск PostgreSQL в Docker;
-* Docker Compose;
-* работа с образами и контейнерами.
-
-### CI/CD
-
-Настроен процесс непрерывной интеграции:
-
-* автоматическая сборка Maven;
-* запуск тестов;
-* проверка Pull Request;
-* использование GitHub Actions.
-
----
-
-# Запуск
-
-## Клонирование
-
-```bash
-git clone https://github.com/pochette/module-4-later-spring-only.git
-```
-
-## Сборка
-
-```bash
-mvn clean verify
-```
-
-## Запуск приложения
-
-```bash
-mvn spring-boot:run
-```
-
-или
+Нужны Docker Desktop и свободный порт 8080.
 
 ```bash
 docker compose up --build
 ```
 
----
+Без Docker нужны JDK 21 и PostgreSQL:
 
-# Полученные навыки
+```bash
+mvn spring-boot:run
+```
 
-В рамках проекта были получены практические навыки:
+## API
 
-* разработка REST API;
-* проектирование backend-приложений;
-* миграция приложения со Spring Framework на Spring Boot;
-* использование Spring Data JPA;
-* работа с Hibernate;
-* проектирование базы данных;
-* написание тестов разных уровней;
-* применение Docker в разработке;
-* настройка CI/CD;
-* использование Git Flow;
-* работа с Maven;
-* обработка ошибок и валидация данных.
+Текущий пользователь передаётся в заголовке `X-Later-User-Id`.
 
----
+| Ресурс | Эндпоинты |
+| --- | --- |
+| Пользователи | `GET /users`, `POST /users` |
+| Ссылки | `POST /items`, `GET /items?state=&contentType=&sort=&limit=&tags=`, `PATCH /items`, `DELETE /items/{id}` |
+| Заметки | `POST /notes`, `GET /notes`, `GET /notes?url=`, `GET /notes?tag=` |
 
-# Статус проекта
+Значения фильтров: `state` — `ALL`, `UNREAD`, `READ`; `contentType` — `ALL`, `ARTICLE`, `IMAGE`, `VIDEO`; `sort` — `NEWEST`, `OLDEST`, `TITLE`, `SITE`.
 
-Проект завершён и представляет собой итоговую демонстрацию освоения современных технологий Java Backend-разработки в рамках курса **«Java-разработчик» Яндекс Практикума**.
+## Тестирование
 
----
+```bash
+mvn test
+```
 
-# Автор
+**28 тестов** покрывают сервисы, контроллеры, репозитории и JSON-сериализацию DTO. Отдельно проверено извлечение метаданных: внешний сайт подменяется MockWebServer.
 
-**Андрей**
+## Автор
 
-Студент 3 курса бакалавриата по направлению **«Прикладная информатика»** Академия ИМСИТ, г. Краснодар
-
-Java Backend Developer
-
-GitHub: https://github.com/pochette
+**Андрей Бурдак** — [GitHub](https://github.com/pochette) · [Telegram @burdak_aa](https://t.me/burdak_aa) · [burdak.andrew@gmail.com](mailto:burdak.andrew@gmail.com)
